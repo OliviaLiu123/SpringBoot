@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: qa  # 设置默认激活的profile为qa环境
+
+
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+    endpoint:
+      health:
+        show-details: always
