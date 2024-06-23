@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WebSocket Test</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+</head>
+
+<body>
+<h1>WebSocket Test</h1>
+<button id="connect">Connect</button>
+<button id="disconnect">Disconnect</button>
+<button id="send">Send</button>
+<input type="text" id="message" placeholder="Enter a Message">
+<div id="console"></div>
+
+<script type="text/javascript">
+    var stompClient = null;
+
+    function connect(){
+        var socket=new SocketJS('/websocket');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({},function(fram){
+            console.log('Connectde:'+ frame);
+            setConnected(true);
+
+        });
+
+    }
+
+    function disconnect(){
+        if(stompClient != null){
+            stompClient.connect();
+        }
+        setConnected(false);
+        console.log("Disconnect");
+
+    }
+
+    function sendName(){
+        var name=document.getElementById('message').value;
+        stompClient.send("app/hello",{},name);
+
+    }
+
+    function setConnected(connected){
+
+        getElmentById('connect').disable =connected;
+        document.getElementById('disconnect').disabled = !connected;
+        document.getElementById('send').disabled = !connected;
+
+
+    }
+
+    connect();
+
+    document.getElementById('connect').addEventListener('click',function(){
+        conect();
+    });
+    document.getElementById('disconnect').addEventListener('click',function(){
+        disconnect();
+    });
+    document.getElementById('send').addEventListener('click',function(){
+        sendName();
+    });
+
+
+
+</script>
+
+
+
+</body>
+</html>
